@@ -25,13 +25,13 @@ from transformers.optimization import (
     get_cosine_with_min_lr_schedule_with_warmup,
 )
 
-from data.dataset_base import DataConfig, PackedDataset, collate_wrapper
-from data.data_utils import add_special_tokens
-from modeling.autoencoder import load_ae
-from modeling.bagel import (
+from bagel.data.dataset_base import DataConfig, PackedDataset, collate_wrapper
+from bagel.data.data_utils import add_special_tokens
+from bagel.modeling.autoencoder import load_ae
+from bagel.modeling.bagel import (
     BagelConfig, Bagel, Qwen2Config, Qwen2ForCausalLM, SiglipVisionConfig, SiglipVisionModel
 )
-from modeling.qwen2 import Qwen2Tokenizer
+from bagel.modeling.qwen2 import Qwen2Tokenizer
 from train.train_utils import create_logger, get_latest_ckpt
 from train.fsdp_utils import (
     FSDPCheckpoint, FSDPConfig, grad_checkpoint_check_fn, fsdp_wrapper, 

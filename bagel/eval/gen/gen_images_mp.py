@@ -8,15 +8,15 @@ from safetensors.torch import load_file
 
 import torch
 import torch.distributed as dist
-from data.data_utils import add_special_tokens
-from modeling.bagel import (
+from bagel.data.data_utils import add_special_tokens
+from bagel.modeling.bagel import (
     BagelConfig, Bagel, Qwen2Config, Qwen2ForCausalLM, SiglipVisionConfig, SiglipVisionModel
 )
-from modeling.qwen2 import Qwen2Tokenizer
-from modeling.autoencoder import load_ae
+from bagel.modeling.qwen2 import Qwen2Tokenizer
+from bagel.modeling.autoencoder import load_ae
 
 from PIL import Image
-from modeling.bagel.qwen2_navit import NaiveCache
+from bagel.modeling.bagel.qwen2_navit import NaiveCache
 
 
 def move_generation_input_to_device(generation_input, device):

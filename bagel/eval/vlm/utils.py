@@ -12,8 +12,8 @@
 import os
 import yaml
 
-from data.data_utils import add_special_tokens, pil_img2rgb
-from modeling.bagel import (
+from bagel.data.data_utils import add_special_tokens, pil_img2rgb
+from bagel.modeling.bagel import (
     BagelConfig, 
     Bagel, 
     Qwen2Config, 
@@ -21,10 +21,10 @@ from modeling.bagel import (
     SiglipVisionConfig, 
     SiglipVisionModel,
 )
-from modeling.qwen2 import Qwen2Tokenizer
+from bagel.modeling.qwen2 import Qwen2Tokenizer
 from safetensors.torch import load_file
 
-from data.transforms import ImageTransform
+from bagel.data.transforms import ImageTransform
 
 
 def load_model_and_tokenizer(args):

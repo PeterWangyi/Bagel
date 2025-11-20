@@ -16,15 +16,15 @@ from pathlib import Path
 from datasets import load_dataset
 
 # Import model components
-from data.data_utils import add_special_tokens
-from modeling.bagel import (
+from bagel.data.data_utils import add_special_tokens
+from bagel.modeling.bagel import (
     BagelConfig, Bagel, Qwen2Config, 
     Qwen2ForCausalLM, SiglipVisionConfig, SiglipVisionModel
 )
-from modeling.qwen2 import Qwen2Tokenizer
-from data.transforms import ImageTransform
-from modeling.bagel.qwen2_navit import NaiveCache
-from modeling.autoencoder import load_ae
+from bagel.modeling.qwen2 import Qwen2Tokenizer
+from bagel.data.transforms import ImageTransform
+from bagel.modeling.bagel.qwen2_navit import NaiveCache
+from bagel.modeling.autoencoder import load_ae
 
 
 def move_generation_input_to_device(generation_input, device):

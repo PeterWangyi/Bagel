@@ -8,17 +8,17 @@ from safetensors.torch import load_file
 
 import torch
 import torch.distributed as dist
-from data.data_utils import add_special_tokens, pil_img2rgb
-from data.transforms import ImageTransform
-from modeling.bagel import (
+from bagel.data.data_utils import add_special_tokens, pil_img2rgb
+from bagel.data.transforms import ImageTransform
+from bagel.modeling.bagel import (
     BagelConfig, Bagel, Qwen2Config, Qwen2ForCausalLM, SiglipVisionConfig, SiglipVisionModel
 )
-from modeling.qwen2 import Qwen2Tokenizer
-from modeling.autoencoder import load_ae
+from bagel.modeling.qwen2 import Qwen2Tokenizer
+from bagel.modeling.autoencoder import load_ae
 
 import copy
 from PIL import Image
-from modeling.bagel.qwen2_navit import NaiveCache
+from bagel.modeling.bagel.qwen2_navit import NaiveCache
 
 
 def setup_distributed():
@@ -412,7 +412,7 @@ if __name__ == "__main__":
     parser.add_argument("--output_dir", type=str, required=True, help="Directory to save the generated images.")
     parser.add_argument("--metadata_file", type=str, required=True, help="JSON file containing lines of metadata for each prompt")
     parser.add_argument("--cfg_text_scale", type=float, default=4)
-    parser.add_argument("--cfg_img_scale", type=float, default=2)
+    parser.add_argument("--cfg_img_scale", type=float, default=1.5)
     parser.add_argument("--max_latent_size", type=int, default=64)
     parser.add_argument("--think", action="store_true")
     parser.add_argument('--model-path', type=str, default='hf/BAGEL-7B-MoT/')
@@ -500,15 +500,19 @@ if __name__ == "__main__":
     start = rank * prompts_per_gpu
     end = min(start + prompts_per_gpu, total_metadatas)
     print(f"GPU {rank}: Processing {end - start} prompts (indices {start} to {end - 1})")
-    image_path = "eval/gen/rise/data"
+    image_path = "eval/gen/kris/KRIS_Bench"
 
     for idx in range(start, end):
         metadata = metadatas[idx]
         images = []
-        images.append(pil_img2rgb(Image.open(os.path.join(image_path, metadata['image']))))
-        prompt = metadata['instruction']
-        os.makedirs(os.path.join(output_dir, metadata['category']), exist_ok=True)
-        outpath = os.path.join(output_dir, metadata['category'], f"{metadata['index']}.png")
+        if isinstance(metadata['ori_img'], str):
+            images.append(pil_img2rgb(Image.open(os.path.join(image_path, metadata['type'], metadata['ori_img']))))
+        else:
+            for img_path in metadata['ori_img']:
+                images.append(pil_img2rgb(Image.open(os.path.join(image_path, metadata['type'], img_path))))
+        prompt = metadata['ins_en']
+        os.makedirs(os.path.join(output_dir, metadata['type']), exist_ok=True)
+        outpath = os.path.join(output_dir, metadata['type'], f"{metadata['id']}.png")
         print(f"GPU {rank} processing prompt {idx - start + 1}/{end - start}: '{prompt}'")
 
         if os.path.exists(outpath):

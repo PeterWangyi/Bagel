@@ -7,16 +7,16 @@ import random
 from accelerate import infer_auto_device_map, load_checkpoint_and_dispatch, init_empty_weights
 from PIL import Image
 
-from data.data_utils import add_special_tokens, pil_img2rgb
-from data.transforms import ImageTransform
-from inferencer import InterleaveInferencer
-from modeling.autoencoder import load_ae
-from modeling.bagel.qwen2_navit import NaiveCache
-from modeling.bagel import (
+from bagel.data.data_utils import add_special_tokens, pil_img2rgb
+from bagel.data.transforms import ImageTransform
+from bagel.inferencer import InterleaveInferencer
+from bagel.modeling.autoencoder import load_ae
+from bagel.modeling.bagel.qwen2_navit import NaiveCache
+from bagel.modeling.bagel import (
     BagelConfig, Bagel, Qwen2Config, Qwen2ForCausalLM,
     SiglipVisionConfig, SiglipVisionModel
 )
-from modeling.qwen2 import Qwen2Tokenizer
+from bagel.modeling.qwen2 import Qwen2Tokenizer
 
 import argparse
 from accelerate.utils import BnbQuantizationConfig, load_and_quantize_model
